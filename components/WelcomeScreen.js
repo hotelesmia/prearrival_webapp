@@ -36,7 +36,7 @@ export function WelcomeScreen({
     <section className="screen welcome active">
       <div className="hero">
         <div className="hero-bg">
-          <img src="/hero-room.jpg" alt="Habitación MÍA Bacalar" />
+          <img src="/DRON%20BACALAR.webp" alt="Vista aérea de MÍA Bacalar sobre la laguna" />
         </div>
         <div className="brand-top">
           <LocaleSwitch locale={locale} onChange={onLocale} label={copy.langLabel} tone="light" />

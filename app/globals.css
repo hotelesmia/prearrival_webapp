@@ -23,6 +23,8 @@
 html,
 body {
   height: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -45,7 +47,8 @@ button {
 }
 
 .app {
-  max-width: 480px;
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
   height: 100dvh;
   background: var(--crema);
@@ -136,7 +139,10 @@ button {
 .welcome,
 .final {
   flex: 1;
+  min-width: 0;
   min-height: 0;
+  max-width: 100%;
+  overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -288,12 +294,17 @@ h2 {
 
 .meta {
   display: flex;
+  flex-wrap: wrap;
   gap: 18px;
   font-size: 11px;
   letter-spacing: 0.04em;
   color: var(--texto-suave);
   margin-bottom: 22px;
   font-weight: 300;
+}
+
+.meta > div {
+  min-width: 0;
 }
 
 .meta b {
@@ -525,6 +536,7 @@ h2 {
 }
 
 .chip {
+  max-width: 100%;
   border: 1px solid var(--linea);
   background: #fff;
   border-radius: 99px;
@@ -533,6 +545,7 @@ h2 {
   cursor: pointer;
   transition: all 0.2s;
   color: var(--texto);
+  overflow-wrap: anywhere;
 }
 
 .chip:hover {
@@ -714,14 +727,18 @@ h2 {
   text-transform: uppercase;
   color: var(--texto-suave);
   flex-shrink: 0;
+  max-width: 46%;
   padding-top: 2px;
+  overflow-wrap: anywhere;
 }
 
 .srow .v {
+  min-width: 0;
   text-align: right;
   font-size: 14px;
   color: var(--verde-profundo);
   font-weight: 400;
+  overflow-wrap: anywhere;
 }
 
 .note {
@@ -832,6 +849,10 @@ h2 {
 .edit-link {
   margin-top: 8px;
   justify-content: center;
+}
+
+.final .edit-link.btn-full {
+  width: auto;
 }
 
 .banner {
@@ -950,6 +971,31 @@ h2 {
 }
 
 @media (max-width: 959px) {
+  .screen,
+  .final-body,
+  .welcome-foot,
+  .top,
+  .nav,
+  .email-box,
+  .summary,
+  .field,
+  .group {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .stay-line,
+  .lead,
+  .hint,
+  .note,
+  .banner,
+  .eb-sub,
+  .opt .txt,
+  .opt .txt strong,
+  .opt .txt span {
+    overflow-wrap: anywhere;
+  }
+
   .welcome .hero .brand-top {
     top: 12px;
   }
@@ -1295,12 +1341,13 @@ h2 {
   }
 }
 
-@media (min-width: 520px) {
+@media (min-width: 520px) and (max-width: 959px) {
   body {
     background: radial-gradient(120% 80% at 50% 0%, #e8e0cf, #dad0bc);
   }
 
   .app {
+    max-width: 480px;
     box-shadow: var(--sombra);
   }
 }
