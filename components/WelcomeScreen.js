@@ -70,7 +70,6 @@ export function WelcomeScreen({
           <label htmlFor="guest-name">{copy.nameLabel}</label>
           <input
             id="guest-name"
-            name="guest_name"
             type="text"
             placeholder={copy.namePlaceholder}
             autoComplete="name"
@@ -82,7 +81,6 @@ export function WelcomeScreen({
           <label htmlFor="reservation-code">{copy.codeLabel}</label>
           <input
             id="reservation-code"
-            name="reservation_code"
             type="text"
             placeholder={copy.codePlaceholder}
             autoComplete="off"
@@ -99,7 +97,7 @@ export function WelcomeScreen({
             {error}
           </p>
         ) : null}
-        <button className="btn btn-primary btn-full" type="submit" disabled={pending}>
+        <button className="btn btn-primary btn-full" type="button" onClick={onSubmit} disabled={pending}>
           {pending ? copy.searching : copy.start} <Arrow />
         </button>
         {mock ? <p className="mock-note">{copy.mockNote}</p> : null}

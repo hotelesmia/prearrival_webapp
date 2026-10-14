@@ -8,7 +8,7 @@ import { Check } from "./Icon";
 export function DoneScreen({ copy, locale, booking, catalog, form, pending, onEdit, onSendEmail }) {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [tone, setTone] = useState("");
+  const [sentTo, setSentTo] = useState("");
 
   const stay = formatStay(booking?.check_in_date, booking?.check_out_date, locale);
   const rows = [
@@ -32,21 +32,16 @@ export function DoneScreen({ copy, locale, booking, catalog, form, pending, onEd
   async function submitEmail(event) {
     event.preventDefault();
     if (!isValidEmail(email)) {
-      setTone("err");
       setMessage(copy.errors.invalid_email);
       return;
     }
     setMessage("");
     const result = await onSendEmail(email.trim());
     if (result?.ok) {
-      setTone("ok");
-      setMessage(copy.emailOk);
+      setSentTo(email.trim());
       return;
     }
-    if (result?.message) {
-      setTone("err");
-      setMessage(result.message);
-    }
+    setMessage(result?.message || copy.errors.request_failed);
   }
 
   return (
@@ -80,23 +75,45 @@ export function DoneScreen({ copy, locale, booking, catalog, form, pending, onEd
       </div>
       <p className="note">{copy.conciergeNote}</p>
       <form className="email-box" onSubmit={submitEmail}>
-        <div className="eb-label">{copy.emailTitle}</div>
-        <div className="eb-sub">{copy.emailSub}</div>
-        <input
-          id="summary-email"
-          type="email"
-          inputMode="email"
-          autoComplete="email"
-          placeholder={copy.emailPlaceholder}
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-        />
-        <button className="btn btn-primary btn-full" type="submit" disabled={pending} style={{ marginTop: 12 }}>
-          {pending ? copy.emailSending : copy.emailButton}
-        </button>
-        <div id="emailMsg" className={tone} role="status">
-          {message}
-        </div>
+        {sentTo ? (
+          <div className="email-sent" role="status">
+            <div className="check-soft" aria-hidden="true">
+              <Check />
+            </div>
+            <div className="eb-label">{copy.emailSent}</div>
+            <p className="eb-sub">{copy.emailSentDetail.replace("{email}", sentTo)}</p>
+            <button className="btn btn-ghost email-again" type="button" onClick={() => setSentTo("")}>
+              {copy.emailAgain}
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="eb-label">{copy.emailTitle}</div>
+            <div className="eb-sub">{copy.emailSub}</div>
+            <input
+              id="summary-email"
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              placeholder={copy.emailPlaceholder}
+              value={email}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                setMessage("");
+              }}
+              aria-invalid={message ? true : undefined}
+              aria-describedby={message ? "emailMsg" : undefined}
+            />
+            <button className="btn btn-primary btn-full" type="button" onClick={submitEmail} disabled={pending} style={{ marginTop: 12 }}>
+              {pending ? copy.emailSending : copy.emailButton}
+            </button>
+            {message ? (
+              <p id="emailMsg" className="banner" role="alert">
+                {message}
+              </p>
+            ) : null}
+          </>
+        )}
       </form>
       <button className="btn btn-ghost btn-full edit-link" type="button" onClick={onEdit} disabled={pending}>
         {pending ? copy.loadingEdit : copy.edit}
